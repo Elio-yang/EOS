@@ -1,3 +1,15 @@
+/*
+ * interrupt.c
+ *
+ * Created by ElioYang on 2022/1/28.
+ * Email: jluelioyang2001@gmail.com
+ *
+ * MIT License
+ * Copyright (c) 2021 Elio-yang
+ *
+ */
+
+
 /* everything about interrupt is implemented in this file */
 #include "interrupt.h"
 #include "types.h"
@@ -26,42 +38,7 @@ extern interrupt_handler interrupt_entry_table[IDT_DESC_CNT];
 //  ...
 //  iret
 typedef void (*handler)(uint8_t);
-handler idt_handler_table[IDT_DESC_CNT]={
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-        general_interrupt_handler,
-};
-
+handler idt_handler_table[IDT_DESC_CNT];
 // register interrupt name
 const char * interrupt_name[IDT_DESC_CNT]={
         "#DE Divide Error",
@@ -96,7 +73,7 @@ const char * interrupt_name[IDT_DESC_CNT]={
         "Unknown",
         "Unknown",
         "Unknown",
-        "8259A IRQ0",
+        "8259A IRQ0 CLK",
 };
 
 // init 8259A
@@ -162,7 +139,7 @@ static  void exception_interrupt_init(){
 void inline idt_init() {
         printk(DEFAULT, "idt_init_start\n");
         idt_desc_init();
-        //exception_interrupt_init();
+        exception_interrupt_init();
         pic_init();
         uint64_t idt_op = ((sizeof(idt) - 1) | ((uint64_t)(uint32_t)idt << 16));
         __asm__ __volatile__(

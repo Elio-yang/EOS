@@ -1,3 +1,14 @@
+;/*
+; * kernel.S
+; *
+; * Created by ElioYang on 2022/1/28.
+; * Email: jluelioyang2001@gmail.com
+; *
+; * MIT License
+; * Copyright (c) 2021 Elio-yang
+; *
+; */
+
 [bits 32]
 %define ERROR_CODE nop
 %define ZERO push 0
@@ -11,7 +22,7 @@ extern test_num
 ;================================================
 ; this part will be put at data section ,for test
  section .data
- intr_str db "Interrupt just occurred!",0xa,0
+ intr_str db "Interrupt just occurred! %d",0xa,0
 ;================================================
 ; stack at interrupt
 ; +================+
@@ -34,66 +45,72 @@ interrupt_entry_table:
 ; A for interrupt code
 ; B for whether push interrupt error code
 ;================================================
-;%macro VECTOR 2
-;section .text
-;interrupt%1entry:
-;    %2
-;    ;==================================
-;    ; save env
-;    push ds
-;    push es
-;    push fs
-;    push gs
-;    pushad
-;    ;==================================
-;    ;end interrupt
-;    ;send EOI to both main & sub chips
-;    mov al,0x20
-;    out 0xa0,al   ;main
-;    out 0x20,al   ;sub
-;    ;==================================
-;    ; the vector num
-;    push %1
-;    ; deal the interrupt
-;    call [idt_handler_table+%1*4]
-;    ;==================================
-;    ; vector num
-;    add esp,4
-;    popad
-;    pop gs
-;    pop fs
-;    pop es
-;    pop ds
-;    add esp,4
-;    iretd
-;section .data
-;    dd interrupt%1entry
-;%endmacro
-
 %macro VECTOR 2
 section .text
 interrupt%1entry:
     %2
     ;==================================
-    ; for test
-
-    push intr_str
-    call printf
-    ;jmp the params if needed
-    add esp,4
+    ; save env
+    push ds
+    push es
+    push fs
+    push gs
+    pushad
     ;==================================
     ;end interrupt
     ;send EOI to both main & sub chips
     mov al,0x20
     out 0xa0,al   ;main
     out 0x20,al   ;sub
-
-    add esp,4     ; error_code or zero
-    iret
+    ;==================================
+    ; the vector num
+    push %1
+    ; deal the interrupt
+    call [idt_handler_table+%1*4]
+    jmp interrupt_exit
+    ;==================================
+    ; vector num
 section .data
     dd interrupt%1entry
 %endmacro
+; this part is all-int exit
+section .text
+global interrupt_exit
+interrupt_exit:
+    add esp,4
+    popad
+    pop gs
+    pop fs
+    pop es
+    pop ds
+    add esp,4
+    iretd
 
+; simple version
+;%macro VECTOR 2
+;section .text
+;interrupt%1entry:
+;    %2
+;    ;==================================
+;    ; for test
+;    push %1
+;    push intr_str
+;    call printf
+;    ;jmp the params if needed
+;    add esp,8
+;    ;==================================
+;    ;end interrupt
+;    ;send EOI to both main & sub chips
+;    mov al,0x20
+;    out 0xa0,al   ;main
+;    out 0x20,al   ;sub
+;
+;    add esp,4     ; error_code or zero
+;    iret
+;section .data
+;    dd interrupt%1entry
+;%endmacro
+;
 
 
 

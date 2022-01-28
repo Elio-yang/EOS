@@ -1,5 +1,15 @@
-#ifndef JOS_INC_TYPES_H
-#define JOS_INC_TYPES_H
+/*
+ *
+ * Created by ElioYang on 2022/1/28.
+ * Email: jluelioyang2001@gmail.com
+ *
+ * MIT License
+ * Copyright (c) 2021 Elio-yang
+ *
+ */
+
+#ifndef __TYPES_H
+#define __TYPES_H
 
 #ifndef NULL
 #define NULL ((void*) 0)
@@ -72,4 +82,4 @@ typedef int32_t off_t;
 // Return the offset of 'member' relative to the beginning of a struct type
 #define offsetof(type, member)  ((size_t) (&((type*)0)->member))
 
-#endif /* !JOS_INC_TYPES_H */
+#endif /* !__TYPES_H */

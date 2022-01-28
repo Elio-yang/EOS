@@ -1,3 +1,13 @@
+/*
+ *
+ * Created by ElioYang on 2022/1/28.
+ * Email: jluelioyang2001@gmail.com
+ *
+ * MIT License
+ * Copyright (c) 2021 Elio-yang
+ *
+ */
+
 #ifndef __AUX_PRINT_H
 #define __AUX_PRINT_H
 #include "types.h"

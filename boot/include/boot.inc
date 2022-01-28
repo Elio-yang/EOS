@@ -1,3 +1,14 @@
+;/*
+; * boot.inc
+; *
+; * Created by ElioYang on 2022/1/28.
+; * Email: jluelioyang2001@gmail.com
+; *
+; * MIT License
+; * Copyright (c) 2021 Elio-yang
+; *
+; */
+
 ;-------------	 loader和kernel   ----------
 LOADER_BASE_ADDR        equ 0x900
 LOADER_STACK_TOP        equ LOADER_BASE_ADDR

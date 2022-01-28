@@ -1,7 +1,15 @@
-/* See COPYRIGHT for copyright information. */
+/*
+ *
+ * Created by ElioYang on 2022/1/28.
+ * Email: jluelioyang2001@gmail.com
+ *
+ * MIT License
+ * Copyright (c) 2021 Elio-yang
+ *
+ */
 
-#ifndef JOS_INC_ERROR_H
-#define JOS_INC_ERROR_H
+#ifndef __ERROR_H
+#define __ERROR_H
 
 enum {
 	// Kernel error codes -- keep in sync with list in lib/printfmt.c.
@@ -17,4 +25,4 @@ enum {
 	MAXERROR
 };
 
-#endif	// !JOS_INC_ERROR_H */
+#endif	// !__ERROR_H*/

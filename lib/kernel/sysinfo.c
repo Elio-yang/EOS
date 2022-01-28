@@ -1,3 +1,14 @@
+/*
+ * sysinfo.c
+ *
+ * Created by ElioYang on 2022/1/28.
+ * Email: jluelioyang2001@gmail.com
+ *
+ * MIT License
+ * Copyright (c) 2021 Elio-yang
+ *
+ */
+
 #include "string.h"
 #include "sysinfo.h"
 #include "aux_print.h"
@@ -21,7 +32,7 @@ void
 cpuid(uint32_t info, uint32_t *eaxp, uint32_t *ebxp, uint32_t *ecxp, uint32_t *edxp)
 {
 	uint32_t eax, ebx, ecx, edx;
-	asm volatile("cpuid"
+	__asm__ __volatile__("cpuid"
 		     : "=a" (eax), "=b" (ebx), "=c" (ecx), "=d" (edx)
 		     : "a" (info));
 	if (eaxp)

@@ -1,5 +1,16 @@
-#ifndef __LIB_STDINT_H
-#define __LIB_STDINT_H
+/*
+ *
+ * Created by ElioYang on 2022/1/28.
+ * Email: jluelioyang2001@gmail.com
+ *
+ * MIT License
+ * Copyright (c) 2021 Elio-yang
+ *
+ */
+
+
+#ifndef __STDINT_H
+#define __STDINT_H
 typedef signed char int8_t;
 typedef signed short int int16_t;
 typedef signed int int32_t;

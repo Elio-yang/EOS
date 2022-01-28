@@ -1,3 +1,13 @@
+/*
+ *
+ * Created by ElioYang on 2022/1/28.
+ * Email: jluelioyang2001@gmail.com
+ *
+ * MIT License
+ * Copyright (c) 2021 Elio-yang
+ *
+ */
+
 #ifndef _SYSINFO_H
 #define _SYSINFO_H
 #include "aux_print.h"

@@ -1,10 +1,23 @@
+/*
+ * init.c
+ *
+ * Created by ElioYang on 2022/1/28.
+ * Email: jluelioyang2001@gmail.com
+ *
+ * MIT License
+ * Copyright (c) 2021 Elio-yang
+ *
+ */
+
 #include "init.h"
 #include "aux_print.h"
 #include "interrupt.h"
-
+#include "timer.h"
 void init_all(void) {
-        //0008:0x00000000c0002890
         printk(DEFAULT, "init_all start\n");
+        // idt pic related
         idt_init();
-        //printk(DEFAULT,"init_all end\n");
+        // counter0 ---- IRQO
+        timer_init();
+        printk(DEFAULT,"init_all end\n");
 }

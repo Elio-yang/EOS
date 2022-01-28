@@ -1,3 +1,14 @@
+;/*
+; * loader.S
+; *
+; * Created by ElioYang on 2022/1/28.
+; * Email: jluelioyang2001@gmail.com
+; *
+; * MIT License
+; * Copyright (c) 2021 Elio-yang
+; *
+; */
+
    %include "boot.inc"
    section loader vstart=LOADER_BASE_ADDR
 ;构建gdt及其内部的描述符

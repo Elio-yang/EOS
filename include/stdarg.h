@@ -1,7 +1,15 @@
-/*	$NetBSD: stdarg.h,v 1.12 1995/12/25 23:15:31 mycroft Exp $	*/
+/*
+ *
+ * Created by ElioYang on 2022/1/28.
+ * Email: jluelioyang2001@gmail.com
+ *
+ * MIT License
+ * Copyright (c) 2021 Elio-yang
+ *
+ */
 
-#ifndef JOS_INC_STDARG_H
-#define	JOS_INC_STDARG_H
+#ifndef __STDARG_H
+#define	__STDARG_H
 
 typedef __builtin_va_list va_list;
 
@@ -11,4 +19,4 @@ typedef __builtin_va_list va_list;
 
 #define va_end(ap) __builtin_va_end(ap)
 
-#endif	/* !JOS_INC_STDARG_H */
+#endif	/* !__STDARG_H */

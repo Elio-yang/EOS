@@ -1,3 +1,14 @@
+/*
+ * string.c
+ *
+ * Created by ElioYang on 2022/1/28.
+ * Email: jluelioyang2001@gmail.com
+ *
+ * MIT License
+ * Copyright (c) 2021 Elio-yang
+ *
+ */
+
 // Basic string routines.  Not hardware optimized, but not shabby.
 
 #include "string.h"

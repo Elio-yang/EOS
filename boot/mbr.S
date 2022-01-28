@@ -1,4 +1,16 @@
-;主引导程序 
+;/*
+; * mbr.S
+; *
+; * Created by ElioYang on 2022/1/28.
+; * Email: jluelioyang2001@gmail.com
+; *
+; * MIT License
+; * Copyright (c) 2021 Elio-yang
+; *
+; */
+
+
+;主引导程序
 ;------------------------------------------------------------
 %include "boot.inc"
 

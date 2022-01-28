@@ -1,6 +1,13 @@
-// Simple implementation of cprintf console output for the kernel,
-// based on printfmt() and the kernel console's cputchar().
-
+/*
+ * printf.c
+ *
+ * Created by ElioYang on 2022/1/28.
+ * Email: jluelioyang2001@gmail.com
+ *
+ * MIT License
+ * Copyright (c) 2021 Elio-yang
+ *
+ */
 #include "types.h"
 #include "stdio.h"
 #include "stdarg.h"

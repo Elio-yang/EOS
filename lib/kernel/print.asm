@@ -1,3 +1,15 @@
+;/*
+; * print.asm
+; *
+; * Created by ElioYang on 2022/1/28.
+; * Email: jluelioyang2001@gmail.com
+; *
+; * MIT License
+; * Copyright (c) 2021 Elio-yang
+; *
+; */
+
+
 TI_GDT equ  0
 RPL0  equ   0
 SELECTOR_VIDEO equ (0x0003<<3) + TI_GDT + RPL0

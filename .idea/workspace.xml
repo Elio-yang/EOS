@@ -18,51 +18,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b36b63fa-3b20-4a25-8b4d-a7f3b8998697" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/device/timer.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/include/timer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bochsout.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bochsrc.disk_win" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/boot/include/boot.inc" beforeDir="false" afterPath="$PROJECT_DIR$/boot/include/boot.inc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/debug.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GNUmakefile" beforeDir="false" afterPath="$PROJECT_DIR$/GNUmakefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bochs.out" beforeDir="false" afterPath="$PROJECT_DIR$/bochs.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bochsrc.disk_nix" beforeDir="false" afterPath="$PROJECT_DIR$/bochsrc.disk_nix" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/boot/loader.S" beforeDir="false" afterPath="$PROJECT_DIR$/boot/loader.S" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/boot/mbr.S" beforeDir="false" afterPath="$PROJECT_DIR$/boot/mbr.S" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/init.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/interrupt.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/kernel.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/print.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/printf.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/printfmt.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/string.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sysinfo.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dbg.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/device/timer.c" beforeDir="false" afterPath="$PROJECT_DIR$/device/timer.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hd60M.img" beforeDir="false" afterPath="$PROJECT_DIR$/hd60M.img" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hd60M.img.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/asmlinkage.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/asmlinkage.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/aux_print.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/aux_print.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/error.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/error.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/global.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/global.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/init.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/init.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/interrupt.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/interrupt.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/io.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/io.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/stdarg.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/stdarg.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/stdint.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/stdint.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/stdio.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/stdio.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/string.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/string.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/sysinfo.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/sysinfo.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/types.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/types.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel.asm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/init.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kernel/kernel.S" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/kernel.S" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kernel/interrupt.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/interrupt.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kernel/printf.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/printf.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kernel/printfmt.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/printfmt.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/make_eos.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/GNUmakefile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,6 +101,11 @@
     </key>
   </component>
   <component name="RunManager" selected="Makefile Application.all">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="all" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="eos_dev" TARGET_NAME="all" CONFIG_NAME="all" version="1">
       <method v="2">
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
@@ -156,11 +126,6 @@
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <list>
       <item itemvalue="Makefile Application.all" />
       <item itemvalue="Makefile Application.asm" />
@@ -178,6 +143,7 @@
       <updated>1643380617138</updated>
       <workItem from="1643380618601" duration="529000" />
       <workItem from="1643381153031" duration="1749000" />
+      <workItem from="1643439207073" duration="5576000" />
     </task>
     <servers />
   </component>

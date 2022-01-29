@@ -16,7 +16,7 @@ LD = ld
 # include directories
 INC = include/aux_print.h include/error.h include/stdarg.h include/stdint.h \
 include/stdio.h include/string.h include/types.h include/interrupt.h include/io.h\
-include/global.h include/init.h include/timer.h  include/asmlinkage.h
+include/global.h include/init.h include/timer.h include/asmlinkage.h include/debug.h
 
 LIB = -I lib/ -I lib/kernel/  -I kernel/ -I include/
 #===================================================================================
@@ -40,7 +40,6 @@ OBJS =$(BUILD_DIR)/main.o  $(BUILD_DIR)/printf.o  \
 # gcc -fno-stack-protector  -Wno-builtin-declaration-mismatch -m32 $(LIB) -c -o $obj $src
 $(BUILD_DIR)/main.o: 	kernel/main.c
 	$(CC) $(CFLAGS) $(BUILD_DIR)/main.o kernel/main.c
-
 # printf
 $(BUILD_DIR)/printf.o:	lib/kernel/printf.c 
 	$(CC) $(CFLAGS) $(BUILD_DIR)/printf.o lib/kernel/printf.c
@@ -49,20 +48,19 @@ $(BUILD_DIR)/printfmt.o:lib/kernel/printfmt.c $(INC)
 # string
 $(BUILD_DIR)/string.o:	lib/kernel/string.c $(INC)
 	$(CC) $(CFLAGS) $(BUILD_DIR)/string.o    lib/kernel/string.c
-
 # system setup related
 $(BUILD_DIR)/sysinfo.o:	lib/kernel/sysinfo.c $(INC)
 	$(CC) $(CFLAGS) $(BUILD_DIR)/sysinfo.o   lib/kernel/sysinfo.c
-
 # interrupt related
 $(BUILD_DIR)/interrupt.o:	lib/kernel/interrupt.c $(INC)
 	$(CC) $(CFLAGS) $(BUILD_DIR)/interrupt.o	lib/kernel/interrupt.c
 $(BUILD_DIR)/init.o:	kernel/init.c $(INC)
 	$(CC) $(CFLAGS) $(BUILD_DIR)/init.o 	kernel/init.c
-
 # timer related
 $(BUILD_DIR)/timer.o:		device/timer.c 		$(INC)
 	$(CC) $(CFLAGS) $(BUILD_DIR)/timer.o	  device/timer.c
+# debug related
+
 #===================================================================================
 $(BUILD_DIR)/print.o: lib/kernel/print.asm
 	$(AS) $(ASFLAGS) $(BUILD_DIR)/print.o     lib/kernel/print.asm

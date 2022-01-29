@@ -11,8 +11,10 @@
 
    %include "boot.inc"
    section loader vstart=LOADER_BASE_ADDR
-;构建gdt及其内部的描述符
-   GDT_BASE:   dd    0x00000000 
+;==============================================================================
+; descriptors and gdt
+;==============================================================================
+   GDT_BASE:   dd    0x00000000
 	           dd    0x00000000
 
    CODE_DESC:  dd    0x0000FFFF 
@@ -22,32 +24,44 @@
 		             dd    DESC_DATA_HIGH4
 
    VIDEO_DESC: dd    0x80000007	       ; limit=(0xbffff-0xb8000)/4k=0x7
-	           dd    DESC_VIDEO_HIGH4  ; 此时dpl为0
+	           dd    DESC_VIDEO_HIGH4  ; dpl=0
 
-   GDT_SIZE     equ   $ - GDT_BASE
-   GDT_LIMIT    equ   GDT_SIZE -	1
-   times 60 dq 0					 ; 此处预留60个描述符的空位(slot)
-   SELECTOR_CODE equ (0x0001<<3) + TI_GDT + RPL0         ; 相当于(CODE_DESC - GDT_BASE)/8 + TI_GDT + RPL0
-   SELECTOR_DATA equ (0x0002<<3) + TI_GDT + RPL0	 ; 同上
-   SELECTOR_VIDEO equ (0x0003<<3) + TI_GDT + RPL0	 ; 同上 
+   GDT_SIZE         equ   $ - GDT_BASE
+   GDT_LIMIT        equ   GDT_SIZE -	1
+   times 60 dq 0					                    ; 60 slots for align
+   SELECTOR_CODE    equ (0x0001<<3) + TI_GDT + RPL0     ; (CODE_DESC - GDT_BASE)/8 + TI_GDT + RPL0
+   SELECTOR_DATA    equ (0x0002<<3) + TI_GDT + RPL0	    ; the same
+   SELECTOR_VIDEO   equ (0x0003<<3) + TI_GDT + RPL0	    ; the same
+;==============================================================================
 
-   ; total_mem_bytes用于保存内存容量,以字节为单位,此位置比较好记。
-   ; 当前偏移loader.bin文件头0x200字节,loader.bin的加载地址是0x900,
-   ; 故total_mem_bytes内存中的地址是0xb00.将来在内核中咱们会引用此地址
-   total_mem_bytes dd 0					 
-   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+   ; total_mem_bytes used for store total memory in bytes
+   ; this line offset from loader.bin header is 0x200 bytes
+   ; while loader.bin is loaded at 0x900 so total_mem_bytes
+   ; located at 0xb00
+   total_mem_bytes dd 0
 
-   ;以下是定义gdt的指针，前2字节是gdt界限，后4字节是gdt起始地址
+   ; gdt pointer structure
+   ; first 2 bytes(word) gdt limit
+   ; next  4 bytes       gdt base address
    gdt_ptr  dw  GDT_LIMIT 
-	    dd  GDT_BASE
+	        dd  GDT_BASE
 
-   ;人工对齐:total_mem_bytes 4字节+gdt_ptr6字节+ards_bufm 244字节+ards_nr2,共256字节
+   ; this used for align to 256
+   ; total_mem_bytes 4B
+   ; gdt_ptr         6B
+   ; ards_bufm      244B
+   ; ards_nr         2B
+   ;----------------------
+   ;                256(0x100)
    ards_buf times 244 db 0
-   ards_nr dw 0		      ;用于记录ards结构体数量
+   ards_nr dw 0
+   ;num of ards structure
 
-; 0xc00
+;==============================================================================
+;  0xc00
    loader_start:
-   
+;==============================================================================
+
 ;-------  int 15h eax = 0000E820h ,edx = 534D4150h ('SMAP') 获取内存布局  -------
 
    xor ebx, ebx		      ;第一次调用时，ebx值要为0
@@ -122,32 +136,32 @@
 .mem_get_ok:
    mov [total_mem_bytes], edx	 ;将内存换为byte单位后存入total_mem_bytes处。
 
-
-;-----------------   准备进入保护模式   -------------------
-;1 打开A20
-;2 加载gdt
-;3 将cr0的pe位置1
-
+;==============================================================================
+; Ready for protection-mode
+;1 set A20
+;2 load gdt
+;3 set cr0 bit-pe
 ;0x00000CAB
-   ;-----------------  打开A20  ----------------
-   in al,0x92
-   or al,0000_0010B
-   out 0x92,al
+;==============================================================================
+    ; step 1
+    in al,0x92
+    or al,0000_0010B
+    out 0x92,al
 
-   ;-----------------  加载GDT  ----------------
-   lgdt [gdt_ptr]
+    ;step 2
+    lgdt [gdt_ptr]
 
-   ;-----------------  cr0第0位置1  ----------------
-   mov eax, cr0
-   or eax, 0x00000001
-   ; switched from 'real mode' to 'protected mode'
-   mov cr0, eax
+    ;step 3
+    mov eax, cr0
+    or eax, 0x00000001
+    mov cr0, eax
 
-   jmp dword SELECTOR_CODE:p_mode_start	     ; 刷新流水线，避免分支预测的影响,这种cpu优化策略，最怕jmp跳转，
-					     ; 这将导致之前做的预测失效，从而起到了刷新的作用。
-.error_hlt:		      ;出错则挂起
+    ; flush pipeline
+    jmp dword SELECTOR_CODE:p_mode_start
+
+.error_hlt:
    hlt
-
+;==============================================================================
 [bits 32]
 p_mode_start:
    mov ax, SELECTOR_DATA
@@ -157,7 +171,8 @@ p_mode_start:
    mov esp,LOADER_STACK_TOP
    mov ax, SELECTOR_VIDEO
    mov gs, ax
-
+;==============================================================================
+; one example when debugging
 ;es:0x0010, dh=0x00cf9300, dl=0x0000ffff, valid=1
 ;        Data segment, base=0x00000000, limit=0xffffffff, Read/Write, Accessed
 ;cs:0x0008, dh=0x00cf9900, dl=0x0000ffff, valid=1
@@ -174,11 +189,11 @@ p_mode_start:
 ;tr:0x0000, dh=0x00008b00, dl=0x0000ffff, valid=1
 ;gdtr:base=0x0000000000000900, limit=0x1f
 ;idtr:base=0x0000000000000000, limit=0x3ff
-
-; -------------------------   加载kernel  ----------------------
-   mov eax, KERNEL_START_SECTOR        ; kernel.bin所在的扇区号
-   mov ebx, KERNEL_BIN_BASE_ADDR       ; 从磁盘读出后，写入到ebx指定的地址
-   mov ecx, 200			       ; 读入的扇区数
+;==============================================================================
+; load the kernel
+   mov eax, KERNEL_START_SECTOR         ; kernel.bin所在的扇区号
+   mov ebx, KERNEL_BIN_BASE_ADDR        ; 从磁盘读出后，写入到ebx指定的地址
+   mov ecx, 200			                ; 读入的扇区数
 
    call rd_disk_m_32
 
@@ -190,8 +205,8 @@ p_mode_start:
 
    ;将gdt描述符中视频段描述符中的段基址+0xc0000000
    mov ebx, [gdt_ptr + 2]  
-   or dword [ebx + 0x18 + 4], 0xc0000000      ;视频段是第3个段描述符,每个描述符是8字节,故0x18。
-					      ;段描述符的高4字节的最高位是段基址的31~24位
+   or dword [ebx + 0x18 + 4], 0xc0000000        ;视频段是第3个段描述符,每个描述符是8字节,故0x18。
+					                            ;段描述符的高4字节的最高位是段基址的31~24位
 
    ;将gdt的基址加上0xc0000000使其成为内核所在的高地址
    add dword [gdt_ptr + 2], 0xc0000000

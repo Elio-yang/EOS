@@ -14,15 +14,15 @@
 %define ZERO push 0
 ;================================================
 ; outer space declared func
-extern test_printk
-extern printf
+;extern test_printk
+;extern printf
 extern idt_handler_table
-extern interrupt_name
-extern test_num
+;extern interrupt_name
+;extern test_num
 ;================================================
 ; this part will be put at data section ,for test
- section .data
- intr_str db "Interrupt just occurred! %d",0xa,0
+; section .data
+; intr_str db "Interrupt just occurred! %d",0xa,0
 ;================================================
 ; stack at interrupt
 ; +================+

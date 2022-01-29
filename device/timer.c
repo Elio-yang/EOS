@@ -15,7 +15,7 @@
 #include "aux_print.h"
 #include "stdint.h"
 
-static void set_counter_frequency(uint8_t port,uint8_t no,uint16_t rw_format,uint8_t mode, uint16_t value){
+static void set_counter_frequency(uint8_t port,uint8_t no,uint8_t rw_format,uint8_t mode, uint16_t value){
     uint8_t control_word = 0;
     control_word |= port<<6;
     control_word |= rw_format<<4;

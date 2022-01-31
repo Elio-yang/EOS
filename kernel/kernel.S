@@ -8,21 +8,12 @@
 ; * Copyright (c) 2021 Elio-yang
 ; *
 ; */
-
 [bits 32]
 %define ERROR_CODE nop
 %define ZERO push 0
 ;================================================
 ; outer space declared func
-;extern test_printk
-;extern printf
 extern idt_handler_table
-;extern interrupt_name
-;extern test_num
-;================================================
-; this part will be put at data section ,for test
-; section .data
-; intr_str db "Interrupt just occurred! %d",0xa,0
 ;================================================
 ; stack at interrupt
 ; +================+
@@ -31,12 +22,22 @@ extern idt_handler_table
 ; | EFLAGES        |
 ; | CS             |
 ; | EIP            |
+; | ds             |
+; | es             |
+; | fs             |
+; | gs             |
+; | pushad         |
 ; | 0 or ERR_CODE  |
 ; |    ...         |
 ; |                |
 ; |                |
 ; +----------------+
 ;================================================
+; !!! big mistake
+; must specify .data for interrupt_entry_table
+; otherwise the idt will not be loaded correctly.
+; check kernel.i to see the difference
+section .data
 global interrupt_entry_table
 interrupt_entry_table:
 ;================================================
@@ -67,16 +68,6 @@ interrupt%1entry:
     push %1
     ; deal the interrupt
     call [idt_handler_table+%1*4]
-    jmp interrupt_exit
-    ;==================================
-    ; vector num
-section .data
-    dd interrupt%1entry
-%endmacro
-; this part is all-int exit
-section .text
-global interrupt_exit
-interrupt_exit:
     add esp,4
     popad
     pop gs
@@ -85,33 +76,11 @@ interrupt_exit:
     pop ds
     add esp,4
     iretd
-
-; simple version
-;%macro VECTOR 2
-;section .text
-;interrupt%1entry:
-;    %2
-;    ;==================================
-;    ; for test
-;    push %1
-;    push intr_str
-;    call printf
-;    ;jmp the params if needed
-;    add esp,8
-;    ;==================================
-;    ;end interrupt
-;    ;send EOI to both main & sub chips
-;    mov al,0x20
-;    out 0xa0,al   ;main
-;    out 0x20,al   ;sub
-;
-;    add esp,4     ; error_code or zero
-;    iret
-;section .data
-;    dd interrupt%1entry
-;%endmacro
-;
-
+    ;==================================
+    ; vector num
+section .data
+    dd interrupt%1entry
+%endmacro
 
 
 ; generate deal procedure

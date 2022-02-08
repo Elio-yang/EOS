@@ -12,6 +12,7 @@
 #define __AUX_PRINT_H
 #include "types.h"
 #include "asmlinkage.h"
+#include "stdarg.h"
 
 #define WINK 0x80
 #define NOWINK 0x00
@@ -42,13 +43,12 @@
 #define GREEN   GEN_COLOR(NOWINK,black,NOLIGHT,green)
 
 
-
+//defined in print.asm
 void put_char(uint8_t char_asci,uint8_t color);
-int printk(uint8_t color,const char *fmt, ...);
-int printf(const char *fmt, ...);
 
-asmlinkage void test_printk(uint8_t vector);
-void test_num();
+extern int printk(uint8_t color,const char *fmt, ...);
+extern int vcprintf(uint8_t color,const char *fmt, va_list);
+extern int printf(const char *fmt, ...);
 #endif
 
 

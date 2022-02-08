@@ -40,5 +40,6 @@
 
 
 void timer_init();
+void delay();
 
 #endif //EOS_DEV_TIMER_H

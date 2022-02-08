@@ -136,6 +136,30 @@ static  void exception_interrupt_init(){
         }
 }
 
+
+enum interrupt_status interrupt_set_status (enum interrupt_status status){
+        if(status==INT_ON){
+                return interrupt_enable();
+        }else{
+                return interrupt_disable();
+        }
+}
+enum interrupt_status interrupt_enable (void){
+        enum interrupt_status old_status = get_interrupt_status;
+        if(old_status==INT_OFF){
+                __asm__ __volatile__ ("sti");
+        }
+        return old_status;
+}
+enum interrupt_status interrupt_disable (void){
+        enum interrupt_status old_status = get_interrupt_status;
+        if(old_status==INT_ON){
+                __asm__ __volatile__ ("cli":::"memory");
+        }
+        return old_status;
+}
+
+
 void inline idt_init() {
         printk(DEFAULT, "idt_init_start\n");
         idt_desc_init();

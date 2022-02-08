@@ -17,17 +17,34 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b36b63fa-3b20-4a25-8b4d-a7f3b8998697" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/include/debug.h" afterDir="false" />
+    <list default="true" id="e95be136-1973-4029-9973-e5ed3225d01f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/doc/memory_layout.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/physical_memory.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/bitmap.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/memory.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kernel/memory.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/kernel/bitmap.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/kernel/debug.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNUmakefile" beforeDir="false" afterPath="$PROJECT_DIR$/GNUmakefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GNUmakefile" beforeDir="false" afterPath="$PROJECT_DIR$/makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bochs.out" beforeDir="false" afterPath="$PROJECT_DIR$/bochs.out" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bochsrc.disk_nix" beforeDir="false" afterPath="$PROJECT_DIR$/bochsrc.disk_nix" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/boot/loader.S" beforeDir="false" afterPath="$PROJECT_DIR$/boot/loader.S" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/boot/mbr.S" beforeDir="false" afterPath="$PROJECT_DIR$/boot/mbr.S" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/device/timer.c" beforeDir="false" afterPath="$PROJECT_DIR$/device/timer.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hd60M.img" beforeDir="false" afterPath="$PROJECT_DIR$/hd60M.img" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/kernel.S" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/kernel.S" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/aux_print.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/aux_print.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/debug.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/debug.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/init.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/init.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/interrupt.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/interrupt.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/io.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/io.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/stdint.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/stdint.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/stdio.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/stdio.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/timer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/timer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/types.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/types.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/init.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/interrupt.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/interrupt.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +97,7 @@
     <option name="majorVersion" value="2021" />
     <option name="minorVersion" value="3.2" />
   </component>
-  <component name="ProjectId" id="24KYCEgLOEEt007lYTsPE81laNS" />
+  <component name="ProjectId" id="24SgzTDe1UcVcX1m121uvWV1Zv9" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -92,15 +109,16 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="fileTemplates" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/imgs" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.C/C++" />
+    <property name="structure.view.defaults.are.configured" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/win" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/imgs" />
     </key>
   </component>
-  <component name="RunManager" selected="Makefile Application.all">
+  <component name="RunManager" selected="Makefile Target.all">
     <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="CLION.EXTERNAL.BUILD" enabled="true" />
@@ -126,24 +144,57 @@
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
+    <configuration name="all" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/makefile" target="all" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <configuration name="build" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/makefile" target="build" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <configuration name="clean" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/makefile" target="clean" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Makefile Application.all" />
       <item itemvalue="Makefile Application.asm" />
       <item itemvalue="Makefile Application.run" />
       <item itemvalue="Makefile Application.build" />
+      <item itemvalue="Makefile Target.all" />
+      <item itemvalue="Makefile Target.build" />
+      <item itemvalue="Makefile Target.clean" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Makefile Target.all" />
+        <item itemvalue="Makefile Target.clean" />
+        <item itemvalue="Makefile Target.build" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b36b63fa-3b20-4a25-8b4d-a7f3b8998697" name="Changes" comment="" />
-      <created>1643380617138</created>
+      <changelist id="e95be136-1973-4029-9973-e5ed3225d01f" name="Changes" comment="" />
+      <created>1643629664555</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1643380617138</updated>
-      <workItem from="1643380618601" duration="529000" />
-      <workItem from="1643381153031" duration="1749000" />
-      <workItem from="1643439207073" duration="5576000" />
+      <updated>1643629664555</updated>
+      <workItem from="1643629665818" duration="109000" />
+      <workItem from="1643888991515" duration="13095000" />
+      <workItem from="1643949354714" duration="101000" />
+      <workItem from="1643949501254" duration="9403000" />
+      <workItem from="1644063121038" duration="629000" />
+      <workItem from="1644242251853" duration="2774000" />
+      <workItem from="1644290394579" duration="471000" />
+      <workItem from="1644290871081" duration="10583000" />
     </task>
     <servers />
   </component>

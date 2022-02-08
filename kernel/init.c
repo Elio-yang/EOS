@@ -10,14 +10,18 @@
  */
 
 #include "init.h"
-#include "aux_print.h"
+#include "stdio.h"
 #include "interrupt.h"
 #include "timer.h"
+#include "memory.h"
 void init_all(void) {
         printk(DEFAULT, "init_all start\n");
         // idt pic related
         idt_init();
         // counter0 ---- IRQO
         timer_init();
+        // memory part
+        memory_init();
+
         printk(DEFAULT,"init_all end\n");
 }

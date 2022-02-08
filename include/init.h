@@ -12,6 +12,12 @@
 #ifndef _INIT_H
 #define _INIT_H
 
+#include "sysinfo.h"
+#include "interrupt.h"
+#include "timer.h"
+#include "debug.h"
+
+
 void init_all(void);
 
 #endif

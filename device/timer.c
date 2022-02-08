@@ -33,3 +33,8 @@ void timer_init(){
     set_counter_frequency(COUNTER0_DATA_PORT,COUNTER0_NO,COUNTER0_RW,COUNTER0_MODE,COUNTER0_INIT_VALUE);
     printf("timer_init end\n");
 }
+
+void delay(){
+    int i=1000;
+    while (i--);
+}

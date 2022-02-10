@@ -14,6 +14,7 @@
 ;================================================
 ; outer space declared func
 extern idt_handler_table
+extern print_now
 ;================================================
 ; stack at interrupt
 ; +================+
@@ -22,12 +23,12 @@ extern idt_handler_table
 ; | EFLAGES        |
 ; | CS             |
 ; | EIP            |
+; | 0 or ERR_CODE  |
 ; | ds             |
 ; | es             |
 ; | fs             |
 ; | gs             |
 ; | pushad         |
-; | 0 or ERR_CODE  |
 ; |    ...         |
 ; |                |
 ; |                |
@@ -165,3 +166,31 @@ VECTOR 0x20,ZERO ; 8259A interrupt-clk
 ;00000000000025f2: (                    ): add esp, 0x00000004       ; 83c404
 ;00000000000025f5: (                    ): iret                      ; cf
 
+
+; this one is simply show cs:ip
+section .text
+interrupt0x21entry:
+    push 0
+    ;==================================
+
+    ;==================================
+    ;end interrupt
+    ;send EOI to both main & sub chips
+    mov al,0x20
+    out 0xa0,al   ;main
+    out 0x20,al   ;sub
+    ;==================================
+
+
+    push dword[esp+4]
+    push dword[esp+12]
+    call print_now
+    add esp,8
+
+
+    add esp,4
+    iretd
+    ;==================================
+    ; vector num
+section .data
+    dd interrupt0x21entry

@@ -53,11 +53,61 @@ struct virtual_addr_pool{
         viraddr_t vir_addr_start;
 };
 
+/* specify which pool used */
+enum pool_flag{
+        PF_K =1,
+        PF_U
+};
+
+#define PE_P_In   0x00000001
+#define PE_P_Out  0x00000000
+#define PE_RW_R   0x00000000
+#define PE_RW_W   0x00000010
+#define PE_US_S   0x00000000
+#define PE_US_U   0x00000100
+
+/* get pte or pde index from a vaddr */
+#define PDE_IDX(vaddr) (((vaddr) & 0xffc00000) >> 22)
+#define PTE_IDX(vaddr) (((vaddr) & 0x003ff000) >> 12)
+
+/*
+ * get a pointer to page table entry of a virtual address
+ * this is a process of construct a new address(virtual)
+ * |10b|10b|12b|
+ *  |    |
+ *  |    |
+ *  |    '-----> page_table_off------------>pte
+ *  v                                    |
+ *  page_dir_off------>page_table_base --'
+ *                |
+ *  page_dir_base-'
+ *
+ *  from the page_dir we set up before ,
+ *  0xffc00000 , higher-10b will get the pde_1023
+ *  which is pointed to the dir and this will
+ *  treat the page_dir as page_table. Then the next 10b
+ *  will be the higher-10b of vaddr ,here this will be
+ *  'page table offset'. So
+ *      0xffc00000+ (vaddr & 0xffc00000)>>10
+ *  will gave a page table base address.
+ * */
+#define PTE_PTR(vaddr) ({ \
+        viraddr_t *pte;                 \
+        pte = (viraddr_t *)( 0xffc00000+\
+        ( ((vaddr) & 0xffc00000)>>10)  +\
+        ( (PTE_IDX(vaddr))<<2       )   );   \
+        pte;})
+/* 0xfffff000 will point to page_dir base */
+#define PDE_PTR(vadde) ({\
+        viraddr_t *pde;  \
+        pde = (viraddr_t*)(0xfffff000 + ((PDE_IDX(vaddr))<<2) ); \
+        pde;\
+        })
 extern struct memory_pool kernel_pool,user_pool;
 
-
 void memory_init(void);
-
+void * alloc_vir_page(enum pool_flag flg, uint32_t cnt) ;
+void *get_kernel_page(uint32_t cnt);
 
 
 #endif //EOS_DEV_MEMORY_H

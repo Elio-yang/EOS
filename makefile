@@ -107,7 +107,7 @@ all: build
 	dd if=build/kernel.bin of=./hd60M.img bs=512 count=200 seek=9 conv=notrunc conv=notrunc
 
 asm: all
-	objdump -D -S -h -r -z $(BUILD_DIR)/kernel.bin > $(BUILD_DIR)/asm/kernel.asm
+	objdump -D -S -l -h -r -z $(BUILD_DIR)/kernel.bin > $(BUILD_DIR)/asm/kernel.asm
 	ndisasm -b32 $(BUILD_DIR)/mbr.bin              > $(BUILD_DIR)/asm/mbr.asm
 	ndisasm -b32 $(BUILD_DIR)/loader.bin           > $(BUILD_DIR)/asm/loader.asm
 	nasm    -E   kernel/kernel.S                   > $(BUILD_DIR)/asm/kernel.i

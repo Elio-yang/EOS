@@ -13,9 +13,9 @@
 #ifndef _INTERRUPT_H
 #define _INTERRUPT_H
 #include "types.h"
-
+#include "stdio.h"
 // supported interrupt num
-#define IDT_DESC_CNT 0x21
+#define IDT_DESC_CNT 0x22
 
 //ports
 #define PIC_M_CTRL 0X20   // main chip control port
@@ -50,6 +50,10 @@ struct interrupt_gate_desc{
 
 typedef void* interrupt_handler;
 void idt_init(void);
+void print_int(uint32_t sth);
+
+
+
 
 enum interrupt_status {
         INT_OFF, // 0 closed
@@ -59,6 +63,8 @@ enum interrupt_status {
 enum interrupt_status interrupt_set_status (enum interrupt_status);
 enum interrupt_status interrupt_enable (void);
 enum interrupt_status interrupt_disable (void);
+
+
 
 
 #endif

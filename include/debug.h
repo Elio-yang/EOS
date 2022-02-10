@@ -13,17 +13,38 @@
 #define EOS_DEV_DEBUG_H
 
 #include "stdint.h"
-void spin_panic(char *filename,int32_t line,const char *funcname,const char *cond) __attribute__((noreturn));
+#include "io.h"
 
-#define panic(...) spin_panic(__FILE__,__LINE__,__FUNCTION__,__VA_ARGS__)
 
-#ifdef DEBUG
+enum debug_type{
+        INFO_t=0,
+        DEBUG_t,
+        WARN_t,
+        ERROR_t
+};
+
+
+void tell(char *filename,int32_t line,const char *func,enum debug_type type,const char *msg);
+
+#define panic(...) tell(__FILE__,__LINE__,__FUNCTION__,ERROR_t,__VA_ARGS__)
+
+#define INFO(...)  tell(__FILE__,__LINE__,__FUNCTION__,INFO_t,__VA_ARGS__)
+
+#define BASIC_INFO __FILE__,__LINE__,__FUNCTION__
+
+#define DEBUG
+
+#ifndef DEBUG
+
 #define Assert(cond) ((void)0)
 #else
 #define Assert(cond){ \
         if(cond){}      \
-        else{panic(#cond);}\
+        else{         \
+        __ASM__("INT $0x21");\
+        panic(#cond);}\
         }
+
 #endif
 
 #endif //EOS_DEV_DEBUG_H

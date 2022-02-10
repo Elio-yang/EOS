@@ -14,6 +14,10 @@
 #ifndef _IO_H
 #define _IO_H
 
+#define __ASM__ __asm__ __volatile
+
+
+
 // b  low 8-bit of a register [a-d]l
 // w  16-bit register  [a-d]x
 

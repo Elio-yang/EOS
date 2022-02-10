@@ -24,7 +24,7 @@ struct bitmap{
 
 void bitmap_init(struct bitmap* bmap);
 bool bitmap_bit(struct  bitmap*bmap , uint32_t idx);
-uint32_t bitmap_allocate_seq_bit(struct  bitmap*bmap, uint32_t cnt);
+int32_t bitmap_allocate_seq_bit(struct  bitmap*bmap, uint32_t cnt);
 void bitmap_bit_set(struct bitmap*bmap, uint32_t idx, int8_t val);
 void bitmap_print(struct bitmap * bmap);
 

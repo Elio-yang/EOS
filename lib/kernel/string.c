@@ -137,14 +137,18 @@ memset(void *v, int c, size_t n)
 	if (n == 0)
 		return v;
 	if ((int)v%4 == 0 && n%4 == 0) {
+#include "stdio.h"
+
+
 		c &= 0xFF;
 		c = (c<<24)|(c<<16)|(c<<8)|c;
-		asm volatile(
+		__asm__ __volatile__(
 			"cld; rep stosl\n"
 			:: "D" (v), "a" (c), "c" (n/4)
 			: "cc", "memory");
-	} else
-		asm volatile("cld; rep stosb\n"
+
+        } else
+		__asm__ __volatile__("cld; rep stosb\n"
 			:: "D" (v), "a" (c), "c" (n)
 			: "cc", "memory");
 	return v;

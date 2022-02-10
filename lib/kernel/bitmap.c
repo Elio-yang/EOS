@@ -33,7 +33,7 @@ bool bitmap_bit(struct bitmap *bmap, uint32_t idx) {
 // brute-force search
 // return the bit index if success
 // -1 for failure
-uint32_t bitmap_allocate_seq_bit(struct bitmap *bmap, uint32_t cnt) {
+int32_t bitmap_allocate_seq_bit(struct bitmap *bmap, uint32_t cnt) {
         uint32_t byte_idx = 0;
         uint32_t bit_idx = 0;
         uint32_t index = 0;
@@ -62,7 +62,7 @@ uint32_t bitmap_allocate_seq_bit(struct bitmap *bmap, uint32_t cnt) {
         index = (byte_idx << 3) + bit_idx;
         // just one bit
         if (cnt == 1) {
-                return index;
+                return (int32_t)index;
         }
         uint32_t left_bits = (bmap->bytes_len << 3) - index;
         uint32_t next_bit = index + 1;
@@ -86,7 +86,7 @@ uint32_t bitmap_allocate_seq_bit(struct bitmap *bmap, uint32_t cnt) {
         }
 
         search_done:
-        return index;
+        return (int32_t)index;
 }
 
 void bitmap_bit_set(struct bitmap *bmap, uint32_t idx, int8_t val) {

@@ -74,6 +74,7 @@ const char * interrupt_name[IDT_DESC_CNT]={
         "Unknown",
         "Unknown",
         "8259A IRQ0 CLK",
+        "OOPS"
 };
 
 // init 8259A
@@ -97,8 +98,10 @@ static inline void pic_init(void) {
         outb(PIC_S_DATA, 0X01);
 
         //ocw1: only open clk-interrupt
-        outb(PIC_M_DATA, 0xfe);
+        outb(PIC_M_DATA, 0xff);
         outb(PIC_S_DATA, 0xff);
+
+
 
         printk(DEFAULT, "    pic_init done\n");
 }
@@ -134,6 +137,7 @@ static  void exception_interrupt_init(){
         for(int i=0;i<IDT_DESC_CNT;i++){
                 idt_handler_table[i]= general_interrupt_handler;
         }
+        idt_handler_table[33]=NULL;
 }
 
 
@@ -173,4 +177,8 @@ void inline idt_init() {
         );
         printk(DEFAULT, "idt_init done\n");
 
+}
+
+void print_now(uint32_t cs,uint32_t eeip){
+        printk(RED,"Current At [%08x : %0x8]\n",cs,eeip);
 }

@@ -1,1 +1,0 @@
-cp ./imgs/hd60M.img . && nasm -I boot/include/ -o build/mbr.bin boot/mbr.S && dd if=build/mbr.bin of=./hd60M.img bs=512 count=1  conv=notrunc && nasm -I boot/include/ -o build/loader.bin boot/loader.S && dd if=build/loader.bin  of=./hd60M.img bs=512 count=3 seek=2 conv=notrunc && dd if=build/kernel.bin of=./hd60M.img bs=512 count=200 seek=9 conv=notrunc conv=notrunc

@@ -1,4 +1,5 @@
 .idea/*
-build
-imgs
-bochs.out
+build/
+.imgs/
+*.out
+

@@ -16,7 +16,6 @@
 void syswelcome()
 {
     int color=GEN_COLOR(NOWINK,white,NOLIGHT,black);
-    printk(DEFAULT,"                                                 \n");
     printk(color,"        |^^^^^^|         ________________________  \n");
     printk(color,"        |      |        /                        \\ \n");
     printk(color,"        |      |       | Welcome to EOS.         | \n");

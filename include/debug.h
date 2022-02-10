@@ -26,17 +26,17 @@ enum debug_type{
 
 void tell(char *filename,int32_t line,const char *func,enum debug_type type,const char *msg);
 
-#define panic(...) tell(__FILE__,__LINE__,__FUNCTION__,ERROR_t,__VA_ARGS__)
 
-#define INFO(...)  tell(__FILE__,__LINE__,__FUNCTION__,INFO_t,__VA_ARGS__)
 
 #define BASIC_INFO __FILE__,__LINE__,__FUNCTION__
 
-#define DEBUG
+//#define DEBUG
 
 #ifndef DEBUG
 
 #define Assert(cond) ((void)0)
+#define panic(...) ((void)0)
+#define INFO(...)  ((void)0)
 #else
 #define Assert(cond){ \
         if(cond){}      \
@@ -44,6 +44,9 @@ void tell(char *filename,int32_t line,const char *func,enum debug_type type,cons
         __ASM__("INT $0x21");\
         panic(#cond);}\
         }
+
+#define panic(...) tell(__FILE__,__LINE__,__FUNCTION__,ERROR_t,__VA_ARGS__)
+#define INFO(...)  tell(__FILE__,__LINE__,__FUNCTION__,INFO_t,__VA_ARGS__)
 
 #endif
 

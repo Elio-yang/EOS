@@ -22,8 +22,8 @@ int main() {
 
         init_all();
         interrupt_enable();
-        void *addr = get_kernel_page(3);
-        printk(DEFAULT,"%08x\n",(uint32_t)addr);
+        //void *addr = get_kernel_page(3);
+        for(int i=0;i<40000000;i++){}
         printk(DEFAULT, "This is kernel version %s\n", "0.1.0");
         syswelcome();
 

@@ -99,7 +99,7 @@ clean:
 build: $(BUILD_DIR)/kernel.bin
 
 all: build
-	cp ./imgs/hd60M.img .
+	cp ./.imgs/disk_main.img .
 	nasm -I boot/include/ -o build/mbr.bin boot/mbr.S
 	nasm -I boot/include/ -o build/loader.bin boot/loader.S
 	dd if=build/mbr.bin of=./hd60M.img bs=512 count=1  conv=notrunc
@@ -113,7 +113,7 @@ asm: all
 	nasm    -E   kernel/kernel.S                   > $(BUILD_DIR)/asm/kernel.i
 
 run: all
-	bochs -f ./bochsrc.disk_nix
+	bochs -f ./eos.bochsrc
 
 
 

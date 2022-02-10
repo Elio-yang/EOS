@@ -113,16 +113,11 @@ static void page_table_install(void *_vaddr, void *_page_physaddr) {
         viraddr_t vaddr = (viraddr_t) _vaddr;
         physaddr_t page_physaddr = (physaddr_t) _page_physaddr;
 
-        INFO("");
-        printk(DEFAULT,"vaddr:%08x\n",vaddr);
-        printk(DEFAULT,"page_phy:%08x\n",page_physaddr);
 
         // corresponding pte and pde pointers
         viraddr_t *ppte = PTE_PTR(vaddr);
         viraddr_t *ppde = PDE_PTR(vaddr);
-        INFO("");
-        printk(DEFAULT,"pte:%08x\n",(uint32_t)ppte);
-        printk(DEFAULT,"pde:%08x\n",(uint32_t)ppde);
+
         if (*ppde & 0x00000001) {
                 // when doing install pte shouldn't be existed
                 Assert(!(*ppte & 0x00000001));
@@ -153,8 +148,7 @@ void * alloc_vir_page(enum pool_flag flg, uint32_t cnt) {
         Assert(cnt > 0 && cnt < 3840);
         void *vaddr_start = alloc_vaddr_pages(flg, cnt);
 
-        INFO("");
-        printk(DEFAULT,"%08x\n",vaddr_start);
+
 
         if (vaddr_start == NULL) {
                 return NULL;
@@ -166,8 +160,7 @@ void * alloc_vir_page(enum pool_flag flg, uint32_t cnt) {
 
         while(count -->0 ){
                 void * page_physaddr = alloc_phy_page(pool);
-                INFO("");
-                printk(DEFAULT,"%08x\n",page_physaddr);
+
                 if(page_physaddr==NULL){
                         return NULL;
                 }
@@ -182,8 +175,6 @@ void * alloc_vir_page(enum pool_flag flg, uint32_t cnt) {
 
 void *get_kernel_page(uint32_t cnt){
         void *vaddr = alloc_vir_page(PF_K,cnt);
-        INFO("");
-        printk(GREEN,"%08x\n",vaddr);
         if(vaddr!=NULL){
                 memset(vaddr,0,cnt*PGSIZE);
         }

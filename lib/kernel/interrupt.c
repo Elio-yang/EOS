@@ -133,11 +133,22 @@ static inline void general_interrupt_handler(uint8_t vector){
         printk(RED,"%s\n",interrupt_name[vector]);
 }
 
+// 0x21 used for print cs:ip
+interrupt_handler(0x21){
+
+        __ASM__("push 68(%esp)  \n"
+                "push 76(%esp)  \n"
+                "call print_now \n"
+                "add %esp,8      ");
+}
+
+
+
 static  void exception_interrupt_init(){
         for(int i=0;i<IDT_DESC_CNT;i++){
                 idt_handler_table[i]= general_interrupt_handler;
         }
-        idt_handler_table[33]=NULL;
+        idt_handler_table[0x21]=interrupt_handler_0x21;
 }
 
 
@@ -180,5 +191,6 @@ void inline idt_init() {
 }
 
 void print_now(uint32_t cs,uint32_t eeip){
-        printk(RED,"Current At [%08x : %0x8]\n",cs,eeip);
+        printk(RED,"Current At [ %08x : %08x]\n",cs,eeip);
 }
+

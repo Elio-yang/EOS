@@ -22,6 +22,7 @@ int main() {
 
         init_all();
         interrupt_enable();
+        __ASM__("INT $0x21");
         //void *addr = get_kernel_page(3);
         for(int i=0;i<40000000;i++){}
         printk(DEFAULT, "This is kernel version %s\n", "0.1.0");

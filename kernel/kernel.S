@@ -70,6 +70,7 @@ interrupt%1entry:
     ; deal the interrupt
     call [idt_handler_table+%1*4]
     add esp,4
+
     popad
     pop gs
     pop fs
@@ -118,9 +119,7 @@ VECTOR 0x1d,ERROR_CODE
 VECTOR 0x1e,ERROR_CODE
 VECTOR 0x1f,ZERO
 VECTOR 0x20,ZERO ; 8259A interrupt-clk
-
-
-
+VECTOR 0x21,ZERO
 ; one case of idt when dbg
 ;Interrupt Descriptor Table (base=0x00000000c00050c0, limit=263):
 ;IDT[0x00]=32-Bit Interrupt Gate target=0x0008:0x00002470, DPL=0
@@ -167,30 +166,30 @@ VECTOR 0x20,ZERO ; 8259A interrupt-clk
 ;00000000000025f5: (                    ): iret                      ; cf
 
 
-; this one is simply show cs:ip
-section .text
-interrupt0x21entry:
-    push 0
-    ;==================================
-
-    ;==================================
-    ;end interrupt
-    ;send EOI to both main & sub chips
-    mov al,0x20
-    out 0xa0,al   ;main
-    out 0x20,al   ;sub
-    ;==================================
-
-
-    push dword[esp+4]
-    push dword[esp+12]
-    call print_now
-    add esp,8
-
-
-    add esp,4
-    iretd
-    ;==================================
-    ; vector num
-section .data
-    dd interrupt0x21entry
+;; this one is simply show cs:ip
+;section .text
+;interrupt0x21entry:
+;    push 0
+;    ;==================================
+;
+;    ;==================================
+;    ;end interrupt
+;    ;send EOI to both main & sub chips
+;    mov al,0x20
+;    out 0xa0,al   ;main
+;    out 0x20,al   ;sub
+;    ;==================================
+;
+;
+;    push dword[esp+4]
+;    push dword[esp+12]
+;    call print_now
+;    add esp,8
+;
+;
+;    add esp,4
+;    iretd
+;    ;==================================
+;    ; vector num
+;section .data
+;    dd interrupt0x21entry

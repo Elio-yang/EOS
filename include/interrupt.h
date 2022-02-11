@@ -37,6 +37,10 @@
         })
 
 
+#define register_interrupt_handler(ID) \
+        void interrupt_handler_##ID (uint8_t vector);
+#define interrupt_handler(ID) \
+        void interrupt_handler_##ID (uint8_t vector)
 // interrupt gate descriptor
 struct interrupt_gate_desc{
     uint16_t interrupt_deal_procedure_off_l;
@@ -64,7 +68,7 @@ enum interrupt_status interrupt_set_status (enum interrupt_status);
 enum interrupt_status interrupt_enable (void);
 enum interrupt_status interrupt_disable (void);
 
-
+register_interrupt_handler(0x21);
 
 
 #endif

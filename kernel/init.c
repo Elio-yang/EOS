@@ -17,9 +17,9 @@
 void init_all(void) {
         printk(DEFAULT, "init_all start\n");
         // idt pic related
-        idt_init();
+        //idt_init();
         // counter0 ---- IRQO
-        timer_init();
+        //timer_init();
         // memory part
         memory_init();
 

@@ -28,7 +28,7 @@ ASFLAGS = -f elf -o
 # for *.c files
 CFLAGS =  -fno-stack-protector -fno-builtin -Wno-builtin-declaration-mismatch -m32 $(LIB) -c -o
 # for link the whole kernel
-LDFLAGES=-m elf_i386 -Ttext $(ENTRY_POINT) -e main -o
+LDFLAGES=-m elf_i386 -e main -Ttext $(ENTRY_POINT)  -o
 #===================================================================================
 # kernel binary
 TARGET_BIN= $(BUILD_DIR)/kernel.bin
@@ -37,10 +37,13 @@ OBJS =$(BUILD_DIR)/main.o  $(BUILD_DIR)/printf.o  \
 		$(BUILD_DIR)/printfmt.o $(BUILD_DIR)/string.o $(BUILD_DIR)/print.o\
 		$(BUILD_DIR)/sysinfo.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/interrupt.o \
 		$(BUILD_DIR)/init.o   $(BUILD_DIR)/timer.o $(BUILD_DIR)/debug.o  $(BUILD_DIR)/bitmap.o \
-		$(BUILD_DIR)/memory.o
+		$(BUILD_DIR)/memory.o $(BUILD_DIR)/thread.o
+#===================================================================================
 #===================================================================================
 # gcc -fno-stack-protector  -Wno-builtin-declaration-mismatch -m32 $(LIB) -c -o $obj $src
 $(BUILD_DIR)/main.o: 		kernel/main.c
+	mkdir -p -- "$(BUILD_DIR)"
+	mkdir -p -- "$(BUILD_DIR)/asm"
 	$(CC) $(CFLAGS) $(BUILD_DIR)/main.o kernel/main.c
 # printf
 $(BUILD_DIR)/printf.o:		lib/kernel/printf.c
@@ -100,10 +103,7 @@ clean:
 
 bin: $(BUILD_DIR)/kernel.bin
 
-all:
-	mkdir -p -- "$(BUILD_DIR)"
-	mkdir -p -- "$(BUILD_DIR)/asm"
-	make bin
+all:bin
 	cp ./img/disk_main.img .
 	nasm -I boot/include/ -o build/mbr.bin boot/mbr.S
 	nasm -I boot/include/ -o build/loader.bin boot/loader.S
@@ -112,7 +112,7 @@ all:
 	dd if=build/kernel.bin of=./disk_main.img bs=512 count=200 seek=9 conv=notrunc conv=notrunc
 
 asm: all
-	objdump -D -S -l -h -r -z $(BUILD_DIR)/kernel.bin > $(BUILD_DIR)/asm/kernel.asm
+	objdump -D -S -l -h -r -z -t $(BUILD_DIR)/kernel.bin > $(BUILD_DIR)/asm/kernel.asm
 	ndisasm -b32 $(BUILD_DIR)/mbr.bin              > $(BUILD_DIR)/asm/mbr.asm
 	ndisasm -b32 $(BUILD_DIR)/loader.bin           > $(BUILD_DIR)/asm/loader.asm
 	nasm    -E   kernel/kernel.S                   > $(BUILD_DIR)/asm/kernel.i

@@ -6,7 +6,7 @@
 # run 'make asm' you'll get disassembly files
 #===================================================================================
 # build directory
-BUILD_DIR = ./build
+BUILD_DIR = build
 # kernel entry point
 ENTRY_POINT = 0xc0001500
 #===================================================================================
@@ -19,7 +19,7 @@ LD = ld
 INC = include/aux_print.h include/error.h include/stdarg.h include/stdint.h \
 include/stdio.h include/string.h include/types.h include/interrupt.h include/io.h\
 include/global.h include/init.h include/timer.h include/asmlinkage.h include/debug.h\
-include/bitmap.h include/memory.h
+include/bitmap.h include/memory.h include/thread.h
 
 LIB = -I lib/ -I lib/kernel/  -I kernel/ -I include/
 #===================================================================================
@@ -30,8 +30,6 @@ CFLAGS =  -fno-stack-protector -fno-builtin -Wno-builtin-declaration-mismatch -m
 # for link the whole kernel
 LDFLAGES=-m elf_i386 -Ttext $(ENTRY_POINT) -e main -o
 #===================================================================================
-# kernel img
-DISK = ./hd60M.img
 # kernel binary
 TARGET_BIN= $(BUILD_DIR)/kernel.bin
 # objects for linkage
@@ -72,6 +70,9 @@ $(BUILD_DIR)/bitmap.o:		lib/kernel/bitmap.c 	$(INC)
 # memory related
 $(BUILD_DIR)/memory.o:		kernel/memory.c 	$(INC)
 	$(CC) $(CFLAGS) $(BUILD_DIR)/memory.o	  kernel/memory.c
+# thread related
+$(BUILD_DIR)/thread.o:		thread/thread.c 	$(INC)
+	$(CC) $(CFLAGS) $(BUILD_DIR)/thread.o		thread/thread.c
 #===================================================================================
 $(BUILD_DIR)/print.o: lib/kernel/print.asm
 	$(AS) $(ASFLAGS) $(BUILD_DIR)/print.o     lib/kernel/print.asm
@@ -94,17 +95,21 @@ $(BUILD_DIR)/kernel.bin: $(OBJS)
 clean:
 	cd $(BUILD_DIR)     &&rm -f ./*.*
 	cd $(BUILD_DIR)/asm &&rm -f ./*.*
+	rm -rf $(BUILD_DIR)
 
 
-build: $(BUILD_DIR)/kernel.bin
+bin: $(BUILD_DIR)/kernel.bin
 
-all: build
-	cp ./.imgs/disk_main.img .
+all:
+	mkdir -p -- "$(BUILD_DIR)"
+	mkdir -p -- "$(BUILD_DIR)/asm"
+	make bin
+	cp ./img/disk_main.img .
 	nasm -I boot/include/ -o build/mbr.bin boot/mbr.S
 	nasm -I boot/include/ -o build/loader.bin boot/loader.S
-	dd if=build/mbr.bin of=./hd60M.img bs=512 count=1  conv=notrunc
-	dd if=build/loader.bin  of=./hd60M.img bs=512 count=3 seek=2 conv=notrunc
-	dd if=build/kernel.bin of=./hd60M.img bs=512 count=200 seek=9 conv=notrunc conv=notrunc
+	dd if=build/mbr.bin of=./disk_main.img bs=512 count=1  conv=notrunc
+	dd if=build/loader.bin  of=./disk_main.img bs=512 count=3 seek=2 conv=notrunc
+	dd if=build/kernel.bin of=./disk_main.img bs=512 count=200 seek=9 conv=notrunc conv=notrunc
 
 asm: all
 	objdump -D -S -l -h -r -z $(BUILD_DIR)/kernel.bin > $(BUILD_DIR)/asm/kernel.asm

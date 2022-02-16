@@ -13,6 +13,7 @@
 
 #include "stdint.h"
 #include "io.h"
+#include "interrupt.h"
 /*
  * CONTROL WORD
  * SC1 SC0 | RL1 RL0 | M2 M1 M0 | BCD
@@ -41,5 +42,9 @@
 
 void timer_init();
 void delay();
+
+
+declare_interrupt_handler(0x20)
+
 
 #endif //EOS_DEV_TIMER_H

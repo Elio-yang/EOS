@@ -11,8 +11,8 @@
 
 #ifndef EOS_DEV_THREAD_H
 #define EOS_DEV_THREAD_H
-
 #include "stdint.h"
+#include "list.h"
 typedef void (thread_func)(void *);
 // state of a thread or process
 enum TASK_STATE{
@@ -49,32 +49,6 @@ struct interrupt_stack{
 
 };
 
-/*
- * when start the thread we will  mov kthread->thread_stack,%esp
- * so stack will be like:
- * --------
- *  ebp         <------esp
- *  ebx
- *  edi
- *  esi
- *  eip
- *  pad
- *  func
- *  arg
- * --------
- *  after doing pop:
- * --------
- *  eip  <------esp
- *  pad
- *  func
- *  arg
- * --------
- * then the ret will set cs:eip --> kernel_thread
- * so we are using ret to execute kernel_thread
- * the pad(unused_ret_addr) is the simulation of
- * ordinary call method, otherwise we fail.
- *
- * */
 
 
 
@@ -95,19 +69,75 @@ struct thread_stack{
         thread_func * function;
         void* func_arg;
 };
+/*
+ * +---------------+ <------HIGH 0xXXXXXfff
+ * | @int stack    |
+ * | ss            |
+ * | esp           |
+ * | eflags        |
+ * | cs            |
+ * | eip           |
+ * | error_code    |
+ * | ds            |
+ * | es            |
+ * | fs            |
+ * | gs            |
+ * | eax~edi       |
+ * | vectorNo      |
+ * +---------------+
+ * | @thread stack |
+ * | func_arg      |
+ * | func          |
+ * | pad_ret       |
+ * | eip           |
+ * | esi           |
+ * | edi           |
+ * | ebx           |
+ * | ebp           |
+ * +---------------+ <----------'
+ * | magic         |            |
+ * | pgdir         |            |
+ * | all_list_tag      |            |
+ * | general_list_tag  |            |
+ * | all_ticks     |            |
+ * | ticks         |            |
+ * | prio          |            |
+ * | name[16]      |            |
+ * | state         |            |
+ * | self_kstack   |------------'
+ * +---------------+   0xXXXXX000
+ *
+ * */
 
 struct task_struct{
         uint32_t *self_kernel_stack;
         enum TASK_STATE state;
-        uint8_t prio;
         char name[16];
+        uint8_t prio;
+        /* how many ticks should be given*/
+        uint8_t ticks_each;
+        /* how many ticks since been executed*/
+        uint32_t total_ticks;
+
+        struct list_entry general_list_tag;
+        struct list_entry all_list_tag;
+
+        /* virtual page table address for this */
+        viraddr_t * pgdir;
+
+
         /* overflow related */
         uint32_t stack_magic;
 };
-
+#define THREAD_MAGIC (0x19870916)
 
 
 struct task_struct* kthread_start(const char *name,uint8_t priority,thread_func func,void *func_arg);
 void kthread_init(struct task_struct *kthread , const char*name,int priority);
 void kthread_create(struct task_struct *kthread, thread_func function, void* arg);
+
+struct task_struct * current_running_thread();
+void schedule();
+
+
 #endif //EOS_DEV_THREAD_H

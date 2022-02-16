@@ -19,14 +19,14 @@ LD = ld
 INC = include/aux_print.h include/error.h include/stdarg.h include/stdint.h \
 include/stdio.h include/string.h include/types.h include/interrupt.h include/io.h\
 include/global.h include/init.h include/timer.h include/asmlinkage.h include/debug.h\
-include/bitmap.h include/memory.h include/thread.h
+include/bitmap.h include/memory.h include/thread.h include/list.h
 
 LIB = -I lib/ -I lib/kernel/  -I kernel/ -I include/
 #===================================================================================
 # for *.S,*.asm  files
 ASFLAGS = -f elf -o
 # for *.c files
-CFLAGS =  -fno-stack-protector -fno-builtin -Wno-builtin-declaration-mismatch -m32 $(LIB) -c -o
+CFLAGS = -std=gnu99 -fno-stack-protector -fno-builtin -Wno-builtin-declaration-mismatch -m32 $(LIB) -c -o
 # for link the whole kernel
 LDFLAGES=-m elf_i386 -e main -Ttext $(ENTRY_POINT)  -o
 #===================================================================================

@@ -45,6 +45,11 @@
 
 //defined in print.asm
 void put_char(uint8_t char_asci,uint8_t color);
+void set_cursor(uint32_t cursor_pos);
+void cls_screen(void);
+
+
+
 
 extern int printk(uint8_t color,const char *fmt, ...);
 extern int vcprintf(uint8_t color,const char *fmt, va_list);

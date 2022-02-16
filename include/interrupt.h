@@ -37,7 +37,7 @@
         })
 
 
-#define register_interrupt_handler(ID) \
+#define declare_interrupt_handler(ID) \
         void interrupt_handler_##ID (uint8_t vector);
 #define interrupt_handler(ID) \
         void interrupt_handler_##ID (uint8_t vector)
@@ -53,8 +53,10 @@ struct interrupt_gate_desc{
 
 
 typedef void* interrupt_handler;
+typedef void (*handler)(uint8_t);
 void idt_init(void);
 void print_int(uint32_t sth);
+void register_idt_handler(uint8_t ,handler );
 
 
 
@@ -68,7 +70,7 @@ enum interrupt_status interrupt_set_status (enum interrupt_status);
 enum interrupt_status interrupt_enable (void);
 enum interrupt_status interrupt_disable (void);
 
-register_interrupt_handler(0x21);
+declare_interrupt_handler(0x21);
 
 
 #endif

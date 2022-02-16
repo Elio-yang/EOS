@@ -37,7 +37,7 @@ extern interrupt_handler interrupt_entry_table[IDT_DESC_CNT];
 //  call idt_handler_table[%1]
 //  ...
 //  iret
-typedef void (*handler)(uint8_t);
+
 handler idt_handler_table[IDT_DESC_CNT];
 // register interrupt name
 const char * interrupt_name[IDT_DESC_CNT]={
@@ -129,8 +129,20 @@ static inline void general_interrupt_handler(uint8_t vector){
         if(vector == 0x27 || vector==0x2f){
                 return;
         }
-        printk(RED,"interrupt vector NO.%d  ",(uint32_t)vector);
-        printk(RED,"%s\n",interrupt_name[vector]);
+        set_cursor(0);
+        int color=GEN_COLOR(NOWINK,white,NOLIGHT,black);
+        printk(color," >>>>>>> EXCEPTION <<<<<<<          \n");
+        printk(color,"        %s                          \n",interrupt_name[vector]);
+        if(vector==14){
+                uint32_t page_fault_addr = 0;
+                __ASM__("movl %%cr2,%0":"=r"(page_fault_addr));
+                printk(color,"page fault addr :%8x\n",page_fault_addr);
+        }
+        printk(color," >>>>>>> END <<<<<<<                \n");
+        while(1);
+
+
+
 }
 
 // 0x21 used for print cs:ip
@@ -142,12 +154,14 @@ interrupt_handler(0x21){
                 "add %esp,8      ");
 }
 
-
-
+void register_idt_handler(uint8_t no ,handler func){
+        idt_handler_table[no]=func;
+}
 static  void exception_interrupt_init(){
         for(int i=0;i<IDT_DESC_CNT;i++){
                 idt_handler_table[i]= general_interrupt_handler;
         }
+
         idt_handler_table[0x21]=interrupt_handler_0x21;
 }
 

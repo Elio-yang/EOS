@@ -51,19 +51,20 @@ typedef int32_t ssize_t;
 // off_t is used for file offsets and lengths.
 typedef int32_t off_t;
 
-// Efficient min and max operations
-#define MIN(_a, _b)						\
-({								\
-	typeof(_a) __a = (_a);					\
-	typeof(_b) __b = (_b);					\
-	__a <= __b ? __a : __b;					\
-})
-#define MAX(_a, _b)						\
-({								\
-	typeof(_a) __a = (_a);					\
-	typeof(_b) __b = (_b);					\
-	__a >= __b ? __a : __b;					\
-})
+/*
+ * strict type-checking max/min
+ */
+#define min(x,y) ({ \
+	const typeof(x) _x = (x);	\
+	const typeof(y) _y = (y);	\
+	(void) (&_x == &_y);		\
+	_x < _y ? _x : _y; })
+
+#define max(x,y) ({ \
+	const typeof(x) _x = (x);	\
+	const typeof(y) _y = (y);	\
+	(void) (&_x == &_y);		\
+	_x > _y ? _x : _y; })
 
 // Rounding operations (efficient when n is a power of 2)
 // Round down to the nearest multiple of n
@@ -79,9 +80,34 @@ typedef int32_t off_t;
 	(typeof(a)) (ROUNDDOWN((uint32_t) (a) + __n - 1, __n));	\
 })
 
+/**
+ * container_of - cast a member of a structure out to the containing structure
+ *
+ * @ptr:	the pointer to the member.
+ * @type:	the type of the container struct this is embedded in.
+ * @member:	the name of the member within the struct.
+ *
+ */
+#define container_of(ptr, type, member) ({			\
+        const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
+        (type *)( (char *)__mptr - offsetof(type,member) );})
+
+
+#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+
+
+/*
+ * Check at compile time that something is of a particular type.
+ * Always evaluates to 1 so you may use it easily in comparisons.
+ */
+#define typecheck(type,x) \
+({	type __dummy; \
+	typeof(x) __dummy2; \
+	(void)(&__dummy == &__dummy2); \
+	1; \
+})
+
 #define ARRAY_SIZE(a)	(sizeof(a) / sizeof(a[0]))
 
-// Return the offset of 'member' relative to the beginning of a struct type
-#define offsetof(type, member)  ((size_t) (&((type*)0)->member))
 
 #endif /* !__TYPES_H */

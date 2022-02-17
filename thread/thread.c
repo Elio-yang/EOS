@@ -36,9 +36,6 @@ static void kernel_thread(thread_func* function,void * arg){
 }
 
 void kthread_create(struct task_struct *kthread, thread_func function, void* arg){
-
-
-
         /* reserve space for int */
         kthread->self_kernel_stack -= sizeof(struct interrupt_stack);
         //printf("in self stack :%08x\n",kthread->self_kernel_stack);
@@ -109,8 +106,8 @@ struct task_struct* kthread_start(const char *name,uint8_t priority,thread_func 
         kthread_create(kthread,func,func_arg);
 
         // make sure not exist
-        Assert(!list_find(&ready_thread_list, &kthread->general_list_tag));
-        list_insert_head(&ready_thread_list,&kthread->general_list_tag);
+        Assert(!list_find(&ready_thread_list, &kthread->ready_list_tag));
+        list_insert_head(&ready_thread_list,&kthread->ready_list_tag);
         Assert(!list_find(&all_thread_list,&kthread->all_list_tag));
         list_insert_head(&all_thread_list,&kthread->all_list_tag);
         return  kthread;
@@ -170,7 +167,7 @@ struct task_struct * current_running_thread(){
 
 static void make_main_thread(void){
         main_thread = current_running_thread();
-        kthread_init(main_thread,"main",31);
+        kthread_init(main_thread,"main",MAIN_THREAD_PRIO);
         // main is not in ready so just add in all-list
         Assert(!list_find(&all_thread_list,&main_thread->all_list_tag));
         list_insert_head(&all_thread_list,&main_thread->all_list_tag);
@@ -183,13 +180,53 @@ void schedule(){
 
         struct task_struct *cur = current_running_thread();
         if(cur->state==TASK_RUNNING){
-                Assert(!list_find(&ready_thread_list,&cur->general_list_tag));
-                list_insert_tail(&ready_thread_list,&cur->general_list_tag);
+                Assert(!list_find(&ready_thread_list,&cur->ready_list_tag));
+                list_insert_tail(&ready_thread_list,&cur->ready_list_tag);
                 cur->ticks_each = cur->prio;
                 cur->state=TASK_READY;
         }
         // ready list not empty
         Assert(!list_empty(&ready_thread_list));
-
+        thread_tag = NULL;
+        thread_tag = list_first(&ready_thread_list);
+        /* container_of is just that one you familiar with */
+        /* here is where we get the next thread */
+        struct task_struct *next = container_of(thread_tag, struct task_struct, ready_list_tag);
+        next->state=TASK_RUNNING;
+        /* here is where we do switching */
+        switch_to(cur,next);
 }
 
+void thread_init(){
+        printk(DEFAULT,"thread init start.\n");
+        list_init(&ready_thread_list);
+        list_init(&all_thread_list);
+        make_main_thread();
+        printk(DEFAULT,"thread init done.\n");
+}
+
+/* set to BLOCKED WAIT HANGING */
+void thread_block(enum TASK_STATE state){
+        Assert((state==TASK_BLOCKED)||(state==TASK_HANGING)||(state==TASK_WAITING));
+        enum interrupt_status old = interrupt_disable();
+        struct task_struct *cur = current_running_thread();
+        cur->state=state;
+        /* switch to another ready task */
+        schedule();
+        interrupt_set_status(old);
+
+}
+void thread_unblock(struct task_struct *kthread){
+        enum interrupt_status old = interrupt_disable();
+        enum TASK_STATE state = kthread->state;
+        Assert((state==TASK_BLOCKED)||(state==TASK_HANGING)||(state==TASK_WAITING));
+        if(kthread->state!=TASK_READY){
+                Assert(!list_find(&ready_thread_list,&kthread->ready_list_tag));
+                if(list_find(&ready_thread_list,&kthread->ready_list_tag)){
+                        panic("blocked thread in ready queue?\n");
+                }
+                kthread->state=TASK_READY;
+                list_insert_head(&ready_thread_list,&kthread->ready_list_tag);
+        }
+        interrupt_set_status(old);
+}

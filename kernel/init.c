@@ -14,6 +14,8 @@
 #include "interrupt.h"
 #include "timer.h"
 #include "memory.h"
+#include "thread.h"
+#include "semaphore.h"
 void init_all(void) {
         printk(DEFAULT, "init_all start\n");
         // idt pic related
@@ -22,6 +24,12 @@ void init_all(void) {
         timer_init();
         // memory part
         memory_init();
+        // thread part
+        thread_init();
+
+        //semaphore_init();
 
         printk(DEFAULT,"init_all end\n");
+        printk(DEFAULT, "This is kernel version %s\n", "0.1.0");
+        welcome();
 }

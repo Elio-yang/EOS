@@ -19,7 +19,8 @@ LD = ld
 INC = include/aux_print.h include/error.h include/stdarg.h include/stdint.h \
 include/stdio.h include/string.h include/types.h include/interrupt.h include/io.h\
 include/global.h include/init.h include/timer.h include/asmlinkage.h include/debug.h\
-include/bitmap.h include/memory.h include/thread.h include/list.h
+include/bitmap.h include/memory.h include/thread.h include/list.h include/semaphore.h\
+include/atomic.h
 
 LIB = -I lib/ -I lib/kernel/  -I kernel/ -I include/
 #===================================================================================
@@ -36,8 +37,8 @@ TARGET_BIN= $(BUILD_DIR)/kernel.bin
 OBJS =$(BUILD_DIR)/main.o  $(BUILD_DIR)/printf.o  \
 		$(BUILD_DIR)/printfmt.o $(BUILD_DIR)/string.o $(BUILD_DIR)/print.o\
 		$(BUILD_DIR)/sysinfo.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/interrupt.o \
-		$(BUILD_DIR)/init.o   $(BUILD_DIR)/timer.o $(BUILD_DIR)/debug.o  $(BUILD_DIR)/bitmap.o \
-		$(BUILD_DIR)/memory.o $(BUILD_DIR)/thread.o
+		$(BUILD_DIR)/init.o   $(BUILD_DIR)/timer.o $(BUILD_DIR)/debug.o   $(BUILD_DIR)/bitmap.o \
+		$(BUILD_DIR)/memory.o $(BUILD_DIR)/thread.o $(BUILD_DIR)/switch.o $(BUILD_DIR)/semaphore.o
 #===================================================================================
 #===================================================================================
 # gcc -fno-stack-protector  -Wno-builtin-declaration-mismatch -m32 $(LIB) -c -o $obj $src
@@ -76,11 +77,16 @@ $(BUILD_DIR)/memory.o:		kernel/memory.c 	$(INC)
 # thread related
 $(BUILD_DIR)/thread.o:		thread/thread.c 	$(INC)
 	$(CC) $(CFLAGS) $(BUILD_DIR)/thread.o		thread/thread.c
+# semaphore related
+$(BUILD_DIR)/semaphore.o:   thread/semaphore.c  $(INC)
+	$(CC) $(CFLAGS) $(BUILD_DIR)/semaphore.o	thread/semaphore.c
 #===================================================================================
 $(BUILD_DIR)/print.o: lib/kernel/print.asm
 	$(AS) $(ASFLAGS) $(BUILD_DIR)/print.o     lib/kernel/print.asm
 $(BUILD_DIR)/kernel.o: kernel/kernel.S
 	$(AS) $(ASFLAGS) $(BUILD_DIR)/kernel.o    kernel/kernel.S
+$(BUILD_DIR)/switch.o: thread/switch.S
+	$(AS) $(ASFLAGS) $(BUILD_DIR)/switch.o    thread/switch.S
 #====================================================================================
 # final stage for build this kernel
 # ld -m elf_i386 -Ttext $(ENTRY_POINT) -e main -o kernel.bin $objs

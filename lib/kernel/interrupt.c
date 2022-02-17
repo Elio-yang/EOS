@@ -98,7 +98,7 @@ static inline void pic_init(void) {
         outb(PIC_S_DATA, 0X01);
 
         //ocw1: only open clk-interrupt
-        outb(PIC_M_DATA, 0xff);
+        outb(PIC_M_DATA, 0xfe);
         outb(PIC_S_DATA, 0xff);
 
 

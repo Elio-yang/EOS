@@ -16,6 +16,8 @@
 #include "interrupt.h"
 #include "timer.h"
 #include "debug.h"
+#include "thread.h"
+#include "stdio.h"
 
 
 void init_all(void);

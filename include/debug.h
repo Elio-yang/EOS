@@ -30,7 +30,7 @@ void tell(char *filename,int32_t line,const char *func,enum debug_type type,cons
 
 #define BASIC_INFO __FILE__,__LINE__,__FUNCTION__
 
-//#define DEBUG
+#define DEBUG
 
 #ifndef DEBUG
 

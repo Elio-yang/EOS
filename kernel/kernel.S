@@ -71,6 +71,7 @@ interrupt%1entry:
     call [idt_handler_table+%1*4]
     add esp,4
 
+    ;exit
     popad
     pop gs
     pop fs

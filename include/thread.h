@@ -61,7 +61,8 @@ struct thread_stack{
 
         /*
          * when first created  eip pointed to the function (kernel_thread)
-         * other time this is the  return address after switch_to
+         * other time this is the return address after switch_to
+         * so only used when first time.
          * */
         void (*eip)(thread_func func,void * func_arg);
         /* just as a base will not use this*/
@@ -70,7 +71,7 @@ struct thread_stack{
         void* func_arg;
 };
 /*
- * +---------------+ <------HIGH 0xXXXXXfff
+ * +---------------+ <------HIGH 0xXXXXXfff      esp first pointed to
  * | @int stack    |
  * | ss            |
  * | esp           |
@@ -97,8 +98,8 @@ struct thread_stack{
  * +---------------+ <----------'
  * | magic         |            |
  * | pgdir         |            |
- * | all_list_tag      |            |
- * | general_list_tag  |            |
+ * | all_list_tag  |            |
+ * | ready_list_tag|            |
  * | all_ticks     |            |
  * | ticks         |            |
  * | prio          |            |
@@ -119,7 +120,7 @@ struct task_struct{
         /* how many ticks since been executed*/
         uint32_t total_ticks;
 
-        struct list_entry general_list_tag;
+        struct list_entry ready_list_tag;
         struct list_entry all_list_tag;
 
         /* virtual page table address for this */
@@ -130,14 +131,16 @@ struct task_struct{
         uint32_t stack_magic;
 };
 #define THREAD_MAGIC (0x19870916)
-
+#define MAIN_THREAD_PRIO (10)
 
 struct task_struct* kthread_start(const char *name,uint8_t priority,thread_func func,void *func_arg);
 void kthread_init(struct task_struct *kthread , const char*name,int priority);
 void kthread_create(struct task_struct *kthread, thread_func function, void* arg);
+void thread_init();
+void thread_block(enum TASK_STATE state);
+void thread_unblock(struct task_struct *kthread);
 
 struct task_struct * current_running_thread();
 void schedule();
-
 
 #endif //EOS_DEV_THREAD_H

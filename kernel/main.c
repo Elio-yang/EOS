@@ -11,29 +11,31 @@
 
 
 
-#include "stdio.h"
-#include "memory.h"
 #include "init.h"
-#include "thread.h"
 
-uint32_t eip = 0;
 
 void kernel_thread_a(void *arg);
+
 int main() {
-
-
         init_all();
-        printk(DEFAULT, "This is kernel version %s\n", "0.1.0");
-        welcome();
-        __asm__ __volatile__ ("cli":::"memory");
-        char *msg="K_A";
-        kthread_start("k_thread_a",1,kernel_thread_a,msg);
 
-        while (1);
+        kthread_start("k_thread_a", 12, kernel_thread_a, NULL);
+
+        // CLK enable
+        interrupt_enable();
+
+        task_A:
+        interrupt_disable();
+        printk(BLUE, "Main");
+        interrupt_enable();
+        goto task_A;
+
 }
+
 void kernel_thread_a(void *arg) {
-        char *msg =  arg;
-        while(1) {
-                printf("thread_%s", msg);
-        }
+        task_B:
+        interrupt_disable();
+        printk(RED, "Thread");
+        interrupt_enable();
+        goto task_B;
 }

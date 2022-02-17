@@ -101,20 +101,6 @@ read_esp(void) {
         return esp;
 }
 
-extern uint32_t eip;
-
-static inline uint32_t read_eip(){
-        __asm__ __volatile__(
-        "pushal                 \n"
-        "call .testpop_	        \n"
-        ".testpop_:		\n"
-        "pop  %ebx		\n"
-        "movl %ebx,%eax	        \n"
-        "movl %eax,eip	        \n"
-        "popal                  \n"
-        );\
-        return eip;
-}
 
 
 #endif

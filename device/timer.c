@@ -42,7 +42,8 @@ void delay(){
 
 interrupt_handler(0x20){
         struct task_struct *cur_thread = current_running_thread();
-        Assert(!cur_thread->stack_magic== THREAD_MAGIC);
+        /* stack is not corrupted */
+        Assert((cur_thread->stack_magic== THREAD_MAGIC));
         cur_thread->total_ticks++;
         ticks++;
         if(cur_thread->ticks_each == 0){

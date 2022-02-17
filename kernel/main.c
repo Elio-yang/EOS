@@ -25,17 +25,13 @@ int main() {
         interrupt_enable();
 
         task_A:
-        interrupt_disable();
-        printk(BLUE, "Main");
-        interrupt_enable();
+        console_print(RED,"MAIN");
         goto task_A;
 
 }
 
 void kernel_thread_a(void *arg) {
         task_B:
-        interrupt_disable();
-        printk(RED, "Thread");
-        interrupt_enable();
+        console_print(GREEN,"A");
         goto task_B;
 }

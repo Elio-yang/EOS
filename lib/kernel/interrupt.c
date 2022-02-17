@@ -205,6 +205,6 @@ void inline idt_init() {
 }
 
 void print_now(uint32_t cs,uint32_t eeip){
-        printk(RED,"Current At [ %08x : %08x]\n",cs,eeip);
+        printk(GREEN,"Current At [ %08x : %08x]\n",cs,eeip);
 }
 

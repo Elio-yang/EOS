@@ -90,7 +90,7 @@ static inline struct list_entry* list_first(struct list *dlist){
 
 static inline bool list_find(struct list *dlist,struct list_entry *entry){
         struct list_entry * first = dlist->head.next;
-        while(entry != &dlist->tail){
+        while((entry != &dlist->tail) && (first!=NULL)){
                 if(entry == first){
                         return true;
                 }
@@ -109,11 +109,12 @@ static inline struct list_entry* list_traversal(struct list *dlist, callback_t f
         if(list_empty(dlist)){
                 return NULL;
         }
-        while(ele != LIST_TAIL(dlist)){
+        while((ele!=NULL) &&(ele != LIST_TAIL(dlist))){
                 if(func(ele,arg)){
                         return ele;
                 }
                 ele = ele->next;
+
         }
         return NULL;
 }

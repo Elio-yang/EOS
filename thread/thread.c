@@ -164,13 +164,34 @@ struct task_struct * current_running_thread(){
         return (struct task_struct*)(esp & 0xfffff000);
 }
 
+static void print_list(void){
+        printf("ready list:");
+        struct list_entry * first = LIST_FIRST(&ready_thread_list);
+        while(first!= &ready_thread_list.tail){
+                struct task_struct * task = container_of(first,struct task_struct,ready_list_tag);
+                printf("[name: %s]---",task->name);
+        }
+        printf("\n");
+        printf("all list:");
+        struct list_entry * f = LIST_FIRST(&all_thread_list);
+        while(f!= &all_thread_list.tail){
+                struct task_struct * task = container_of(first,struct task_struct,all_list_tag);
+                printf("[name: %s]---",task->name);
+        }
+        printf("\n");
+}
 
 static void make_main_thread(void){
         main_thread = current_running_thread();
         kthread_init(main_thread,"main",MAIN_THREAD_PRIO);
+        print_list();
         // main is not in ready so just add in all-list
-        Assert(!list_find(&all_thread_list,&main_thread->all_list_tag));
+        // TODO:BUG
+        // when DEBUG is defined ---> #PF ??
+        //Assert(!list_find(&all_thread_list,&main_thread->all_list_tag));
+        list_find(&all_thread_list,&main_thread->all_list_tag);
         list_insert_head(&all_thread_list,&main_thread->all_list_tag);
+        printf("here");
 }
 
 
@@ -201,6 +222,7 @@ void thread_init(){
         printk(DEFAULT,"thread init start.\n");
         list_init(&ready_thread_list);
         list_init(&all_thread_list);
+
         make_main_thread();
         printk(DEFAULT,"thread init done.\n");
 }
@@ -225,8 +247,10 @@ void thread_unblock(struct task_struct *kthread){
                 if(list_find(&ready_thread_list,&kthread->ready_list_tag)){
                         panic("blocked thread in ready queue?\n");
                 }
+                /* add to ready queue */
                 kthread->state=TASK_READY;
                 list_insert_head(&ready_thread_list,&kthread->ready_list_tag);
         }
         interrupt_set_status(old);
 }
+

@@ -13,12 +13,13 @@
 #define _INIT_H
 
 #include "sysinfo.h"
+#include "debug.h"
+#include "stdio.h"
 #include "interrupt.h"
 #include "timer.h"
-#include "debug.h"
+#include "memory.h"
 #include "thread.h"
-#include "stdio.h"
-
+#include "console.h"
 
 void init_all(void);
 

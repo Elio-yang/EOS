@@ -1,0 +1,1 @@
+nm build/kernel.bin | grep $1

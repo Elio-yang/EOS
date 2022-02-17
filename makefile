@@ -19,8 +19,8 @@ LD = ld
 INC = include/aux_print.h include/error.h include/stdarg.h include/stdint.h \
 include/stdio.h include/string.h include/types.h include/interrupt.h include/io.h\
 include/global.h include/init.h include/timer.h include/asmlinkage.h include/debug.h\
-include/bitmap.h include/memory.h include/thread.h include/list.h include/semaphore.h\
-include/atomic.h
+include/bitmap.h include/memory.h include/thread.h include/list.h include/sync.h \
+include/atomic.h include/console.h
 
 LIB = -I lib/ -I lib/kernel/  -I kernel/ -I include/
 #===================================================================================
@@ -38,7 +38,8 @@ OBJS =$(BUILD_DIR)/main.o  $(BUILD_DIR)/printf.o  \
 		$(BUILD_DIR)/printfmt.o $(BUILD_DIR)/string.o $(BUILD_DIR)/print.o\
 		$(BUILD_DIR)/sysinfo.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/interrupt.o \
 		$(BUILD_DIR)/init.o   $(BUILD_DIR)/timer.o $(BUILD_DIR)/debug.o   $(BUILD_DIR)/bitmap.o \
-		$(BUILD_DIR)/memory.o $(BUILD_DIR)/thread.o $(BUILD_DIR)/switch.o $(BUILD_DIR)/semaphore.o
+		$(BUILD_DIR)/memory.o $(BUILD_DIR)/thread.o $(BUILD_DIR)/switch.o $(BUILD_DIR)/sync.o   \
+		$(BUILD_DIR)/console.o
 #===================================================================================
 #===================================================================================
 # gcc -fno-stack-protector  -Wno-builtin-declaration-mismatch -m32 $(LIB) -c -o $obj $src
@@ -78,8 +79,11 @@ $(BUILD_DIR)/memory.o:		kernel/memory.c 	$(INC)
 $(BUILD_DIR)/thread.o:		thread/thread.c 	$(INC)
 	$(CC) $(CFLAGS) $(BUILD_DIR)/thread.o		thread/thread.c
 # semaphore related
-$(BUILD_DIR)/semaphore.o:   thread/semaphore.c  $(INC)
-	$(CC) $(CFLAGS) $(BUILD_DIR)/semaphore.o	thread/semaphore.c
+$(BUILD_DIR)/sync.o:   thread/sync.c  			$(INC)
+	$(CC) $(CFLAGS) $(BUILD_DIR)/sync.o	thread/sync.c
+# console related
+$(BUILD_DIR)/console.o: device/console.c   		$(INC)
+	$(CC) $(CFLAGS) $(BUILD_DIR)/console.o	device/console.c
 #===================================================================================
 $(BUILD_DIR)/print.o: lib/kernel/print.asm
 	$(AS) $(ASFLAGS) $(BUILD_DIR)/print.o     lib/kernel/print.asm

@@ -21,6 +21,6 @@
 #include "thread.h"
 #include "console.h"
 
-void init_all(void);
+void init(void);
 
 #endif

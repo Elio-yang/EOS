@@ -11,8 +11,8 @@
 
 #include "init.h"
 
-void init_all(void) {
-        printk(DEFAULT, "init_all start\n");
+void init(void) {
+        printk(DEFAULT, "init start\n");
         // idt pic related
         idt_init();
         // counter0 ---- IRQO
@@ -24,7 +24,8 @@ void init_all(void) {
         // console part
         console_init();
 
-        printk(DEFAULT,"init_all end\n");
+        printk(DEFAULT,"init end\n");
         printk(DEFAULT, "This is kernel version %s\n", "0.1.0");
         welcome();
+        delay();
 }

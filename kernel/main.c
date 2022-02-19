@@ -17,7 +17,7 @@
 void kernel_thread_a(void *arg);
 
 int main() {
-        init_all();
+        init();
 
         kthread_start("k_thread_a", 12, kernel_thread_a, NULL);
 
